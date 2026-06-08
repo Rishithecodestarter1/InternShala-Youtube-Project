@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import api from '../api/axiosInstance.js'
 import { categories } from '../components/FilterBar.jsx'
 import VideoCard from '../components/VideoCard.jsx'
-import { useAuth } from '../context/AuthContext.jsx'
+import { useAuth } from '../hooks/useAuth.js'
 
 const emptyVideoForm = {
   title: '',

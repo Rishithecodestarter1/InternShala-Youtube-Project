@@ -1,7 +1,7 @@
 // CommentSection.jsx - Full CRUD comment system for a video. Add, edit, and delete comments without nesting.
 import { useEffect, useState } from 'react'
 import api from '../api/axiosInstance.js'
-import { useAuth } from '../context/AuthContext.jsx'
+import { useAuth } from '../hooks/useAuth.js'
 
 function CommentSection({ videoId }) {
   const { isAuthenticated, user } = useAuth()

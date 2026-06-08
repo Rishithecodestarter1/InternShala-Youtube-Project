@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import api from '../api/axiosInstance.js'
 import CommentSection from '../components/CommentSection.jsx'
-import { useAuth } from '../context/AuthContext.jsx'
+import { useAuth } from '../hooks/useAuth.js'
 import { formatDate, formatViews } from '../utils/formatters.js'
 
 function VideoPlayerPage() {

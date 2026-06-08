@@ -1,6 +1,6 @@
 // ProtectedRoute.jsx - Redirects users to the auth page when they try to access protected screens.
 import { Navigate, Outlet } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext.jsx'
+import { useAuth } from '../hooks/useAuth.js'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useAuth()
