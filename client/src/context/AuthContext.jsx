@@ -38,7 +38,18 @@ export function AuthProvider({ children }) {
     setUser(null)
   }
 
-  const value = useMemo(() => ({ token, user, isAuthenticated: Boolean(token), login, logout }), [token, user])
+  const updateUser = (nextUserData) => {
+    setUser((currentUser) => {
+      const mergedUser = { ...currentUser, ...nextUserData }
+      localStorage.setItem('user', JSON.stringify(mergedUser))
+      return mergedUser
+    })
+  }
+
+  const value = useMemo(
+    () => ({ token, user, isAuthenticated: Boolean(token), login, logout, updateUser }),
+    [token, user],
+  )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

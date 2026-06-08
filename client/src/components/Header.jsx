@@ -6,6 +6,7 @@ function Header({ onMenuClick }) {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { isAuthenticated, logout, user } = useAuth()
+  const channelLink = user?.channels?.[0] ? `/channel/${user.channels[0]}` : '/channel/new'
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -40,6 +41,9 @@ function Header({ onMenuClick }) {
           </Link>
         ) : (
           <>
+            <Link className="secondary-button" to={channelLink}>
+              Your Channel
+            </Link>
             <span className="user-chip">
               <span className="user-chip__avatar">{user?.username?.slice(0, 1).toUpperCase()}</span>
               <span>{user?.username}</span>
