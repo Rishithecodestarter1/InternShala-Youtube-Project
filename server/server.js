@@ -5,6 +5,7 @@ import express from 'express'
 import { connectDB } from './config/db.js'
 import authRoutes from './routes/authRoutes.js'
 import channelRoutes from './routes/channelRoutes.js'
+import commentRoutes from './routes/commentRoutes.js'
 import videoRoutes from './routes/videoRoutes.js'
 
 dotenv.config({ quiet: true })
@@ -27,6 +28,7 @@ app.get('/', (_request, response) => {
 app.use('/api/auth', authRoutes)
 app.use('/api/channels', channelRoutes)
 app.use('/api/videos', videoRoutes)
+app.use('/api/videos', commentRoutes)
 
 app.use((error, _request, response, _next) => {
   response.status(error.statusCode || 500).json({
