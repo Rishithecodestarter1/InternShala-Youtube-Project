@@ -30,6 +30,10 @@ app.use('/api/channels', channelRoutes)
 app.use('/api/videos', videoRoutes)
 app.use('/api/videos', commentRoutes)
 
+app.use((_request, response) => {
+  response.status(404).json({ message: 'Route not found.' })
+})
+
 app.use((error, _request, response, _next) => {
   if (error.name === 'CastError') {
     return response.status(400).json({ message: 'Invalid resource id.' })
