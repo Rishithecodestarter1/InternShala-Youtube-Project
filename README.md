@@ -134,3 +134,11 @@ The capstone requires at least 30 meaningful commits. This repository uses backe
 - Keep `.env` private.
 - Use `server/.env.example` and `client/.env.example` for evaluator setup.
 - Provide a demo video link in your final GitHub README before submission.
+
+## Demo Video
+
+Add your Loom or screen recording link here after recording the final walkthrough:
+
+```text
+Demo video: pending
+```
