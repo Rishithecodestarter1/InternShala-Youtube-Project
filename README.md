@@ -52,6 +52,27 @@ youtube-clone/
 - MongoDB locally or a MongoDB Atlas connection string
 - Git for the required commit history
 
+## Quick Start
+
+Install both workspaces from the repository root:
+
+```powershell
+npm run install:all
+```
+
+Run the backend and frontend in separate terminals:
+
+```powershell
+npm run dev:server
+npm run dev:client
+```
+
+Seed data is loaded from the backend workspace:
+
+```powershell
+npm run seed
+```
+
 ## Backend Setup
 
 ```powershell
@@ -91,7 +112,7 @@ Copy-Item .env.example .env
 npm run dev
 ```
 
-The frontend runs at `http://localhost:5173`.
+The frontend runs at `http://localhost:5173` and proxies `/api` requests to the backend during local development.
 
 ## Seeded Login Credentials
 
