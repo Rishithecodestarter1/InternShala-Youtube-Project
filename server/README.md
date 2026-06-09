@@ -29,4 +29,11 @@ JWT_SECRET=your_very_long_secret_key_here
 - 6 videos
 - 3 comments
 
-Use `john@example.com` or `jane@example.com` with password `password123`.
+Seeded login credentials:
+
+| User | Email | Password |
+| --- | --- | --- |
+| John Creator | `john@example.com` | `password123` |
+| Jane Viewer | `jane@example.com` | `password123` |
+
+Use either seeded user to test login, comments, likes, dislikes, and channel-owned video actions after seeding the database.
