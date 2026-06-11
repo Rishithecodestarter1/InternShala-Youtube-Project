@@ -221,11 +221,15 @@ function ChannelPage() {
         </form>
       )}
 
-      <div className="video-grid">
-        {videos.map((video) => (
-          <VideoCard key={video._id} video={video} showOwnerActions={isOwner} onEdit={startEdit} onDelete={deleteVideo} />
-        ))}
-      </div>
+      {videos.length === 0 ? (
+        <p className="page-message">{isOwner ? 'Upload your first video to start building this channel.' : 'This channel has no videos yet.'}</p>
+      ) : (
+        <div className="video-grid">
+          {videos.map((video) => (
+            <VideoCard key={video._id} video={video} showOwnerActions={isOwner} onEdit={startEdit} onDelete={deleteVideo} />
+          ))}
+        </div>
+      )}
     </section>
   )
 }
