@@ -6,13 +6,15 @@ const editableVideoFields = ['title', 'description', 'thumbnailUrl', 'videoUrl',
 
 function buildVideoQuery({ search, category }) {
   const query = {}
+  const normalizedSearch = search?.trim()
+  const normalizedCategory = category?.trim()
 
-  if (search) {
-    query.title = { $regex: search, $options: 'i' }
+  if (normalizedSearch) {
+    query.title = { $regex: normalizedSearch, $options: 'i' }
   }
 
-  if (category && category !== 'All') {
-    query.category = category
+  if (normalizedCategory && normalizedCategory !== 'All') {
+    query.category = normalizedCategory
   }
 
   return query
