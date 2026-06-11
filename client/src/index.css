@@ -35,6 +35,15 @@ a {
   text-decoration: none;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgb(37, 99, 235);
+  outline-offset: 3px;
+}
+
 img,
 video {
   max-width: 100%;
