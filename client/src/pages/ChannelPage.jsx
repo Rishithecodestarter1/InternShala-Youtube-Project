@@ -21,6 +21,7 @@ function ChannelPage() {
   const [channel, setChannel] = useState(null)
   const [videos, setVideos] = useState([])
   const [channelForm, setChannelForm] = useState({ channelName: '', description: '' })
+  const [channelErrors, setChannelErrors] = useState({})
   const [videoForm, setVideoForm] = useState(emptyVideoForm)
   const [editingVideo, setEditingVideo] = useState(null)
   const [showVideoForm, setShowVideoForm] = useState(false)
@@ -56,15 +57,32 @@ function ChannelPage() {
   const createChannel = async (event) => {
     event.preventDefault()
     setError('')
+    const nextErrors = {}
 
     if (!isAuthenticated) {
       navigate('/auth')
       return
     }
 
+    if (channelForm.channelName.trim().length < 3) nextErrors.channelName = 'Channel name must be at least 3 characters.'
+    if (channelForm.description.trim().length < 10) nextErrors.description = 'Description must be at least 10 characters.'
+
+    setChannelErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) return
+
     const response = await api.post('/channels', channelForm)
     updateUser({ channels: [...(user?.channels || []), response.data._id] })
     navigate(`/channel/${response.data._id}`)
+  }
+
+  const handleChannelFormChange = (event) => {
+    const { name, value } = event.target
+    setChannelForm((current) => ({ ...current, [name]: value }))
+    setChannelErrors((current) => {
+      const nextErrors = { ...current }
+      delete nextErrors[name]
+      return nextErrors
+    })
   }
 
   const handleVideoFormChange = (event) => {
@@ -119,11 +137,13 @@ function ChannelPage() {
         <form className="form-card" onSubmit={createChannel}>
           <div className="form-field">
             <label htmlFor="channelName">Channel Name</label>
-            <input id="channelName" value={channelForm.channelName} onChange={(event) => setChannelForm((current) => ({ ...current, channelName: event.target.value }))} />
+            <input id="channelName" name="channelName" value={channelForm.channelName} aria-invalid={Boolean(channelErrors.channelName)} onChange={handleChannelFormChange} />
+            {channelErrors.channelName && <span className="error-text">{channelErrors.channelName}</span>}
           </div>
           <div className="form-field">
             <label htmlFor="description">Description</label>
-            <textarea id="description" value={channelForm.description} onChange={(event) => setChannelForm((current) => ({ ...current, description: event.target.value }))} />
+            <textarea id="description" name="description" value={channelForm.description} aria-invalid={Boolean(channelErrors.description)} onChange={handleChannelFormChange} />
+            {channelErrors.description && <span className="error-text">{channelErrors.description}</span>}
           </div>
           {error && <p className="error-text">{error}</p>}
           <button className="primary-button" type="submit">
