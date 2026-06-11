@@ -431,6 +431,12 @@ video {
   margin-bottom: 24px;
 }
 
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .page-message {
   display: grid;
   min-height: 240px;
@@ -637,6 +643,21 @@ video {
   .comment-edit .primary-button,
   .inline-confirm .secondary-button,
   .inline-confirm .danger-button {
+    width: 100%;
+  }
+
+  .channel-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .video-form,
+  .form-actions {
+    width: 100%;
+  }
+
+  .form-actions .primary-button,
+  .form-actions .secondary-button {
     width: 100%;
   }
 }
