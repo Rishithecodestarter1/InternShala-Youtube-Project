@@ -4,6 +4,12 @@ import Video from '../models/Video.js'
 
 const editableVideoFields = ['title', 'description', 'thumbnailUrl', 'videoUrl', 'category']
 
+function normalizeVideoFields(fields) {
+  return Object.fromEntries(
+    Object.entries(fields).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value]),
+  )
+}
+
 function buildVideoQuery({ search, category }) {
   const query = {}
   const normalizedSearch = search?.trim()
@@ -49,7 +55,7 @@ export async function getVideoById(request, response, next) {
 
 export async function createVideo(request, response, next) {
   try {
-    const { title, thumbnailUrl, videoUrl, description = '', category, channelId } = request.body
+    const { title, thumbnailUrl, videoUrl, description = '', category, channelId } = normalizeVideoFields(request.body)
 
     if (!title || !thumbnailUrl || !videoUrl || !category || !channelId) {
       return response.status(400).json({ message: 'Title, thumbnail, video URL, category, and channel are required.' })
@@ -97,9 +103,13 @@ export async function updateVideo(request, response, next) {
 
     editableVideoFields.forEach((field) => {
       if (request.body[field] !== undefined) {
-        video[field] = request.body[field]
+        video[field] = typeof request.body[field] === 'string' ? request.body[field].trim() : request.body[field]
       }
     })
+
+    if (!video.title || !video.thumbnailUrl || !video.videoUrl || !video.category) {
+      return response.status(400).json({ message: 'Title, thumbnail, video URL, and category cannot be blank.' })
+    }
 
     const updatedVideo = await video.save()
     return response.status(200).json(updatedVideo)
