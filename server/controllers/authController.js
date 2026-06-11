@@ -12,8 +12,9 @@ function createToken(user) {
 export async function registerUser(request, response, next) {
   try {
     const { username, email, password } = request.body
+    const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : ''
 
-    if (!username || !email || !password) {
+    if (!username || !normalizedEmail || !password) {
       return response.status(400).json({ message: 'Username, email, and password are required.' })
     }
 
@@ -25,7 +26,7 @@ export async function registerUser(request, response, next) {
       return response.status(400).json({ message: 'Password must be at least 6 characters.' })
     }
 
-    const existingUser = await User.findOne({ email: email.toLowerCase() })
+    const existingUser = await User.findOne({ email: normalizedEmail })
     if (existingUser) {
       return response.status(400).json({ message: 'Email already registered.' })
     }
@@ -33,7 +34,7 @@ export async function registerUser(request, response, next) {
     const hashedPassword = await bcrypt.hash(password, 12)
     await User.create({
       username: username.trim(),
-      email: email.toLowerCase().trim(),
+      email: normalizedEmail,
       password: hashedPassword,
     })
 
@@ -47,12 +48,13 @@ export async function registerUser(request, response, next) {
 export async function loginUser(request, response, next) {
   try {
     const { email, password } = request.body
+    const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : ''
 
-    if (!email || !password) {
+    if (!normalizedEmail || !password) {
       return response.status(400).json({ message: 'Email and password are required.' })
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() })
+    const user = await User.findOne({ email: normalizedEmail })
     if (!user) {
       return response.status(400).json({ message: 'Invalid email or password.' })
     }
