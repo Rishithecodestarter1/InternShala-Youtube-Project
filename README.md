@@ -155,7 +155,7 @@ Every CSS color value is written with `rgb(...)` or `rgba(...)`. Do not use hex,
 
 ## Commit Strategy
 
-The capstone requires at least 30 meaningful commits. This repository uses backend, frontend, styling, documentation, and verification commits to keep the history clear.
+The capstone requires a meaningful development history. This repository now targets 60 or more real commits, grouped across backend, frontend, styling, documentation, and verification work so the history reads like normal project progress.
 
 ## Submission Notes
 
