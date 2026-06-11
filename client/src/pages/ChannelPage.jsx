@@ -132,8 +132,13 @@ function ChannelPage() {
   }
 
   const deleteVideo = async (video) => {
-    await api.delete(`/videos/${video._id}`)
-    setVideos((current) => current.filter((item) => item._id !== video._id))
+    try {
+      setError('')
+      await api.delete(`/videos/${video._id}`)
+      setVideos((current) => current.filter((item) => item._id !== video._id))
+    } catch (apiError) {
+      setError(apiError.response?.data?.message || 'Unable to delete video.')
+    }
   }
 
   if (loading) return <p className="page-message">Loading channel...</p>
@@ -180,6 +185,8 @@ function ChannelPage() {
           </button>
         )}
       </div>
+
+      {error && !showVideoForm && <p className="error-text">{error}</p>}
 
       {showVideoForm && (
         <form className="form-card video-form" onSubmit={submitVideo}>
