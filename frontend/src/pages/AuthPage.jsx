@@ -17,12 +17,19 @@ function AuthPage() {
   const handleChange = (event) => {
     const { name, value } = event.target
     setForm((current) => ({ ...current, [name]: value }))
+    setMessage('')
     setErrors((current) => {
       const nextErrors = { ...current }
       delete nextErrors[name]
       delete nextErrors.api
       return nextErrors
     })
+  }
+
+  const switchMode = (nextIsLogin) => {
+    setIsLogin(nextIsLogin)
+    setErrors({})
+    setMessage('')
   }
 
   const validate = () => {
@@ -45,17 +52,18 @@ function AuthPage() {
 
     try {
       if (isLogin) {
-        const response = await api.post('/auth/login', { email: form.email, password: form.password })
+        const response = await api.post('/auth/login', { email: form.email.trim().toLowerCase(), password: form.password })
         login(response.data)
         navigate('/')
       } else {
-        const response = await api.post('/auth/register', {
+        await api.post('/auth/register', {
           username: form.username,
-          email: form.email,
+          email: form.email.trim().toLowerCase(),
           password: form.password,
         })
-        login(response.data)
-        navigate('/')
+        setIsLogin(true)
+        setForm((current) => ({ username: '', email: current.email.trim().toLowerCase(), password: '', confirmPassword: '' }))
+        setMessage('Registration successful. Please sign in with your new account.')
       }
     } catch (apiError) {
       setErrors({ api: apiError.response?.data?.message || 'Authentication failed.' })
@@ -70,10 +78,10 @@ function AuthPage() {
           <span>youtube-clone</span>
         </Link>
         <div className="auth-tabs">
-          <button className={isLogin ? 'auth-tabs__button auth-tabs__button--active' : 'auth-tabs__button'} type="button" onClick={() => setIsLogin(true)}>
+          <button className={isLogin ? 'auth-tabs__button auth-tabs__button--active' : 'auth-tabs__button'} type="button" onClick={() => switchMode(true)}>
             Sign In
           </button>
-          <button className={!isLogin ? 'auth-tabs__button auth-tabs__button--active' : 'auth-tabs__button'} type="button" onClick={() => setIsLogin(false)}>
+          <button className={!isLogin ? 'auth-tabs__button auth-tabs__button--active' : 'auth-tabs__button'} type="button" onClick={() => switchMode(false)}>
             Register
           </button>
         </div>
