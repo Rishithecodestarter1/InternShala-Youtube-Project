@@ -63,7 +63,7 @@ export async function getVideos(request, response, next) {
 
 export async function getVideoById(request, response, next) {
   try {
-    const video = await Video.findByIdAndUpdate(request.params.id, { $inc: { views: 1 } }, { new: true })
+    const video = await Video.findByIdAndUpdate(request.params.id, { $inc: { views: 1 } }, { returnDocument: 'after' })
 
     if (!video) {
       return response.status(404).json({ message: 'Video not found.' })
