@@ -1,19 +1,28 @@
 # youtube-clone
 
-`youtube-clone` is a MERN stack capstone project that recreates the core YouTube experience: authentication, searchable video feeds, category filters, native video playback, likes and dislikes, channel management, and full comment CRUD.
+`youtube-clone` is a MERN stack capstone project with JWT authentication, channel management, video playback, likes/dislikes, comments, search, filters, and a reusable JWT secret utility built with Node.js crypto.
 
-## Technology Stack
+## Tech Stack
 
-- Frontend: React, Vite latest, React Router, Axios
-- Backend: Node.js, Express.js, MongoDB, Mongoose
-- Authentication: JSON Web Tokens with bcrypt password hashing
-- Styling: responsive CSS with only `rgb(...)` and `rgba(...)` color values
+- Frontend: React, Vite 8, React Router, Axios
+- Backend: Node.js, Express, MongoDB, Mongoose
+- Authentication: JWT with bcrypt password hashing
+- Styling and logs: CSS uses only `rgb(...)` / `rgba(...)`; backend console logs use RGB ANSI escape codes
 
 ## Folder Structure
 
 ```text
 youtube-clone/
-  client/
+  backend/
+    config/
+    controllers/
+    middleware/
+    models/
+    routes/
+    utils/
+    seed.js
+    server.js
+  frontend/
     src/
       api/
       components/
@@ -21,75 +30,31 @@ youtube-clone/
       hooks/
       pages/
       utils/
-  server/
-    config/
-    controllers/
-    middleware/
-    models/
-    routes/
-    seed.js
-    server.js
   README.md
 ```
 
-## Features
+## Setup
 
-- Register and login with JWT authentication
-- Header shows Sign In before login and username after login
-- Search videos by title through the backend API
-- Filter videos by category with 10 filter buttons
-- Responsive YouTube-style header, sidebar, filter row, and video grid
-- Native HTML5 video player
-- Like and dislike toggles stored per user
-- Comment add, edit, and delete operations
-- Channel creation for signed-in users
-- Channel owner video upload, edit, and delete
-- MongoDB seed file with users, channels, videos, and comments
-
-## Prerequisites
-
-- Node.js
-- MongoDB locally or a MongoDB Atlas connection string
-- Git for the required commit history
-
-## Quick Start
-
-Install both workspaces from the repository root:
+Install dependencies from the project root:
 
 ```powershell
 npm run install:all
 ```
 
-Run the backend and frontend in separate terminals:
+Create or refresh a secure JWT secret:
 
 ```powershell
-npm run dev:server
-npm run dev:client
+npm run secret:generate
+npm run secret:verify
 ```
 
-Seed data is loaded from the backend workspace:
-
-```powershell
-npm run seed
-```
-
-## Backend Setup
-
-```powershell
-cd server
-npm install
-Copy-Item .env.example .env
-```
-
-Edit `server/.env`:
+Edit `backend/.env` and set MongoDB:
 
 ```env
 PORT=5000
-MONGO_URI=your_mongodb_connection_string_here
-JWT_SECRET=your_very_long_secret_key_here
+MONGO_URI="mongodb://127.0.0.1:27017/youtube-clone"
+JWT_SECRET="generated_by_the_secret_utility"
 ```
-
-Use a local MongoDB URI for offline testing or a MongoDB Atlas URI for hosted data. Keep `JWT_SECRET` long and private because it signs every login token.
 
 Seed the database:
 
@@ -97,88 +62,84 @@ Seed the database:
 npm run seed
 ```
 
-Start the backend:
+Start the app in two terminals:
 
 ```powershell
-npm run dev
+npm run dev:server
+npm run dev:client
 ```
 
-The API runs at `http://localhost:5000`.
+Open:
 
-## Frontend Setup
-
-```powershell
-cd client
-npm install
-Copy-Item .env.example .env
-npm run dev
+```text
+Frontend: http://127.0.0.1:5173/
+Backend: http://localhost:5000/
 ```
 
-The frontend runs at `http://localhost:5173` and proxies `/api` requests to the backend during local development.
+## Seeded Login
 
-The client environment file only needs the API base URL:
-
-```env
-VITE_API_URL=http://localhost:5000/api
+```text
+Email: john@example.com
+Password: password123
 ```
 
-## Seeded Login Credentials
+```text
+Email: jane@example.com
+Password: password123
+```
 
-- Email: `john@example.com`
-- Password: `password123`
+## Features
 
-- Email: `jane@example.com`
-- Password: `password123`
+- Register and login with JWT
+- Secure JWT secret generation and verification
+- Search videos by title, channel, or category
+- Category filters with pagination-ready backend API
+- Native video playback with view count increments
+- Like/dislike toggles
+- Full comment CRUD
+- Channel create/update flow
+- Owner-only video upload, edit, and delete
+- Responsive YouTube-style layout
 
 ## API Summary
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
 - `GET /api/videos`
+- `GET /api/videos?search=music&category=Music&page=1&limit=3`
 - `GET /api/videos/:id`
 - `POST /api/videos`
 - `PUT /api/videos/:id`
 - `DELETE /api/videos/:id`
 - `PUT /api/videos/:id/like`
+- `POST /api/videos/:id/like`
 - `PUT /api/videos/:id/dislike`
-- `POST /api/channels`
-- `GET /api/channels/:id`
-- `GET /api/channels/:id/videos`
+- `POST /api/videos/:id/dislike`
 - `GET /api/videos/:videoId/comments`
 - `POST /api/videos/:videoId/comments`
 - `PUT /api/videos/:videoId/comments/:commentId`
 - `DELETE /api/videos/:videoId/comments/:commentId`
+- `PUT /api/comments/:commentId`
+- `DELETE /api/comments/:commentId`
+- `POST /api/channels`
+- `GET /api/channels/:id`
+- `PUT /api/channels/:id`
+- `GET /api/channels/:id/videos`
 
-## API Verification
-
-After starting the backend, verify the API from PowerShell:
+## Verification
 
 ```powershell
+npm run lint
+npm run build
+Get-ChildItem backend -Recurse -Filter *.js | ForEach-Object { node --check $_.FullName }
 Invoke-RestMethod http://localhost:5000/
-Invoke-RestMethod "http://localhost:5000/api/videos"
-Invoke-RestMethod "http://localhost:5000/api/videos?search=music"
-Invoke-RestMethod "http://localhost:5000/api/videos?category=Education"
+Invoke-RestMethod "http://localhost:5000/api/videos?search=music&category=Music&page=1&limit=3"
+Invoke-RestMethod "http://127.0.0.1:5173/api/videos"
 ```
 
-## RGB Color Rule
+## Security Notes
 
-Every CSS color value is written with `rgb(...)` or `rgba(...)`. Do not use hex, HSL, or named CSS colors.
-
-## Commit Strategy
-
-The capstone requires a meaningful development history. This repository now targets 60 or more real commits, grouped across backend, frontend, styling, documentation, and verification work so the history reads like normal project progress.
-
-## Submission Notes
-
-- Do not submit `node_modules`.
-- Keep `.env` private.
-- Use `server/.env.example` and `client/.env.example` for evaluator setup.
-- Provide a demo video link in your final GitHub README before submission.
-
-## Demo Video
-
-Add your Loom or screen recording link here after recording the final walkthrough:
-
-```text
-Demo video: pending
-```
+- Never commit `backend/.env`.
+- Keep `JWT_SECRET` private.
+- If the secret leaks, generate a new one and make users log in again.
+- The project already has more than 20 meaningful Git commits.
