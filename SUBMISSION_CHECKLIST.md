@@ -14,6 +14,17 @@ Use this file as the final verification guide before submitting the `youtube-clo
 - `.env`, `.env.*`, `node_modules`, build output, and logs are ignored by Git.
 - Git commits use `Rishi Nandan Choudhary <rishinandan1431@gmail.com>`.
 
+## Capstone PDF Requirement Map
+
+- Frontend home page: `Header`, toggleable `Sidebar`, `FilterBar`, and responsive `VideoCard` grid are implemented.
+- User authentication: registration, login, JWT storage, validation messages, and signed-in username display are implemented.
+- Search and filters: header search uses URL query state, and category buttons filter videos through the backend API.
+- Video player page: native video playback, metadata, description, like/dislike buttons, and full comment CRUD are implemented.
+- Channel page: signed-in users can create/update a channel and upload/edit/delete their own videos.
+- Backend API: Express routes cover auth, channel management, video management, reactions, and comments.
+- MongoDB data: users, channels, videos, comments, video URLs, and thumbnail URLs are stored with Mongoose models.
+- Submission rules: Vite is used instead of CRA, ES Modules are used instead of CommonJS, and ignored folders/files stay out of Git.
+
 ## Static Verification
 
 - Run `npm run lint` from the repository root.
