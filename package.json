@@ -11,6 +11,7 @@
     "build": "npm run build --prefix frontend",
     "lint": "npm run lint --prefix frontend",
     "secret:generate": "node backend/utils/generateSecret.js",
-    "secret:verify": "node backend/utils/verifySecret.js"
+    "secret:verify": "node backend/utils/verifySecret.js",
+    "verify:runtime": "node scripts/verify-runtime.js"
   }
 }
