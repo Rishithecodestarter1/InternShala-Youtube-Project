@@ -30,6 +30,7 @@ function ChannelPage() {
   const [savingVideo, setSavingVideo] = useState(false)
   const [showVideoForm, setShowVideoForm] = useState(false)
   const [error, setError] = useState('')
+  const [statusMessage, setStatusMessage] = useState('')
   const [loading, setLoading] = useState(channelId !== 'new')
 
   const isNewChannelFlow = channelId === 'new' || !channelId
@@ -97,16 +98,19 @@ function ChannelPage() {
   const handleChannelEditChange = (event) => {
     const { name, value } = event.target
     setChannelEditForm((current) => ({ ...current, [name]: value }))
+    setStatusMessage('')
   }
 
   const updateChannel = async (event) => {
     event.preventDefault()
     setError('')
+    setStatusMessage('')
 
     try {
       const response = await api.put(`/channels/${channel._id}`, channelEditForm)
       setChannel(response.data)
       setChannelEditOpen(false)
+      setStatusMessage('Channel details saved.')
     } catch (apiError) {
       setError(apiError.response?.data?.message || 'Unable to update channel.')
     }
@@ -115,6 +119,7 @@ function ChannelPage() {
   const handleVideoFormChange = (event) => {
     const { name, value } = event.target
     setVideoForm((current) => ({ ...current, [name]: value }))
+    setStatusMessage('')
     setVideoErrors((current) => {
       const nextErrors = { ...current }
       delete nextErrors[name]
@@ -128,6 +133,7 @@ function ChannelPage() {
     setEditingVideo(null)
     setShowVideoForm(false)
     setError('')
+    setStatusMessage('')
   }
 
   const validateVideoForm = () => {
@@ -146,6 +152,7 @@ function ChannelPage() {
   const submitVideo = async (event) => {
     event.preventDefault()
     setError('')
+    setStatusMessage('')
 
     if (!validateVideoForm()) return
 
@@ -154,12 +161,15 @@ function ChannelPage() {
       if (editingVideo) {
         const response = await api.put(`/videos/${editingVideo._id}`, videoForm)
         setVideos((current) => current.map((video) => (video._id === editingVideo._id ? response.data : video)))
+        resetVideoForm()
+        setStatusMessage('Video changes saved.')
       } else {
         const response = await api.post('/videos', { ...videoForm, channelId: channel._id })
         // The new video is immediately added to local state so the user sees it without a full page reload.
         setVideos((current) => [response.data, ...current])
+        resetVideoForm()
+        setStatusMessage('Video uploaded and added to this channel.')
       }
-      resetVideoForm()
     } catch (apiError) {
       setError(apiError.response?.data?.message || 'Unable to save video.')
     } finally {
@@ -168,6 +178,8 @@ function ChannelPage() {
   }
 
   const startEdit = (video) => {
+    setError('')
+    setStatusMessage('')
     setEditingVideo(video)
     setVideoForm({
       title: video.title,
@@ -182,8 +194,10 @@ function ChannelPage() {
   const deleteVideo = async (video) => {
     try {
       setError('')
+      setStatusMessage('')
       await api.delete(`/videos/${video._id}`)
       setVideos((current) => current.filter((item) => item._id !== video._id))
+      setStatusMessage('Video deleted from this channel.')
     } catch (apiError) {
       setError(apiError.response?.data?.message || 'Unable to delete video.')
     }
@@ -240,6 +254,7 @@ function ChannelPage() {
       </div>
 
       {error && !showVideoForm && <p className="error-text">{error}</p>}
+      {statusMessage && <p className="success-text">{statusMessage}</p>}
 
       {channelEditOpen && (
         <form className="form-card video-form" onSubmit={updateChannel}>
