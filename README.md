@@ -139,7 +139,21 @@ Get-ChildItem backend -Recurse -Filter *.js | ForEach-Object { node --check $_.F
 Invoke-RestMethod http://localhost:5000/
 Invoke-RestMethod "http://localhost:5000/api/videos?search=music&category=Music&page=1&limit=3"
 Invoke-RestMethod "http://127.0.0.1:5173/api/videos"
+npm run verify:runtime
 ```
+
+## Demo Recording Guide
+
+Record the short submission demo separately after starting both servers. A complete walkthrough should show:
+
+- Home page with header, toggleable sidebar, filter row, and seeded video grid.
+- Sign In before login, then login with `john@example.com` / `password123`.
+- Search for `react`, then filter by `Education`, `Music`, `Gaming`, `Sports`, and `News`.
+- Watch page with video playback, like/dislike, description, and comment add/edit/delete.
+- Channel page with channel details, upload form validation, video upload/edit/delete, and success messages.
+- Mobile or narrow browser width to show the responsive layout.
+
+Do not commit the recorded video file unless the submission portal explicitly asks for it in the repository.
 
 ## Security Notes
 

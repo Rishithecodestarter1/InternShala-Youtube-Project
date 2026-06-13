@@ -105,12 +105,26 @@ Use this file as the final verification guide before submitting the `youtube-clo
   ```powershell
   Invoke-RestMethod http://127.0.0.1:5173/api/videos
   ```
+- Run the automated runtime smoke check:
+  ```powershell
+  npm run verify:runtime
+  ```
 - Confirm the terminal logs show no runtime errors.
+
+## Short Video Demo Checklist
+
+- Show the home page with the header, sidebar toggle, filters, and seeded videos.
+- Sign in with a seeded user and show the username/avatar state in the header.
+- Demonstrate search by title and category filtering.
+- Open a video and show playback, like/dislike, and comment add/edit/delete.
+- Open the channel page and show create/update channel plus video upload/edit/delete.
+- Resize the browser or use responsive tools to show mobile/tablet usability.
+- Keep the demo video outside Git unless the submission instructions specifically require committing it.
 
 ## Git And Submission
 
 - Run `git status --short --branch` and confirm the tree is clean.
-- Run `git rev-list --count HEAD` and confirm the repository has more than 61 commits after final polish.
+- Run `git rev-list --count HEAD` and confirm the repository has at least 72 commits after final polish.
 - Run `git log --format="%h | %an <%ae> | %s" --max-count=10` and confirm the newest commits are under your name.
 - Confirm the remote URL:
   ```powershell
