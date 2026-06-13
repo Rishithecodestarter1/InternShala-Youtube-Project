@@ -2,6 +2,10 @@
 
 `youtube-clone` is a MERN stack capstone project with JWT authentication, channel management, video playback, likes/dislikes, comments, search, filters, and a reusable JWT secret utility built with Node.js crypto.
 
+## Github Link
+
+`https://github.com/Rishithecodestarter1/InternShala-Youtube-Project`
+
 ## Tech Stack
 
 - Frontend: React, Vite 8, React Router, Axios
